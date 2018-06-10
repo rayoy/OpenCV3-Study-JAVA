@@ -1,10 +1,15 @@
 package opencv.study;
 
-import com.liuqi.opencv.base.OpenCVProcessBase;
 import org.junit.Test;
-import org.opencv.core.*;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+
+import com.liuqi.opencv.base.OpenCVProcessBase;
 
 /**
  * @Author : alexliu
@@ -37,11 +42,11 @@ public class StudySection_2 extends OpenCVProcessBase {
      * 此方式读取图像后，为原始未转化的图像
      */
     @Test
-    public void readImage_1(){
+    public void readImage_1() {
 
         Mat sourceImage = Imgcodecs.imread(this.p_test_file_path + "/5cent.jpg");
         //输出文件
-        this.saveImage(this.save_dir + "/read_image_fn_1.png",sourceImage);
+        this.saveImage(this.save_dir + "/read_image_fn_1.png", sourceImage);
     }
 
     /**
@@ -49,9 +54,9 @@ public class StudySection_2 extends OpenCVProcessBase {
      * 此方式读取后，图像是一个 8位通道图像，也就是经过灰度处理的
      */
     @Test
-    public void readImage_2(){
-        Mat sourceImage = Imgcodecs.imread(p_test_file_path + "/5cent.jpg",Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-        this.saveImage(this.save_dir + "/read_image_fn_2.png",sourceImage);
+    public void readImage_2() {
+        Mat sourceImage = Imgcodecs.imread(p_test_file_path + "/5cent.jpg", Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+        this.saveImage(this.save_dir + "/read_image_fn_2.png", sourceImage);
 
         //如果不采用此方式进行灰度处理，可以手动进行灰度处理
         //Mat image = Imgcodecs.imread(test_file_path + "/5cent.jpg");
@@ -60,53 +65,53 @@ public class StudySection_2 extends OpenCVProcessBase {
 
     /**
      * ROI -- Region Of Interest [感兴趣区域]
-     *
+     * <p>
      * 把感兴趣的区域勾画出来
      */
     @Test
-    public void testROI_1(){
+    public void testROI_1() {
 
         // 读取彩色图
-        Mat sourceImage = Imgcodecs.imread(this.p_test_file_path + "/5cent.jpg",Imgcodecs.CV_LOAD_IMAGE_COLOR);
+        Mat sourceImage = Imgcodecs.imread(this.p_test_file_path + "/5cent.jpg", Imgcodecs.CV_LOAD_IMAGE_COLOR);
 
         // 划线，设置2个点，分别为开始点，结束点，设置线条颜色
-        Imgproc.rectangle(sourceImage,new Point(30,30),new Point(500,500) , new Scalar(0,255,0));
+        Imgproc.rectangle(sourceImage, new Point(30, 30), new Point(500, 500), new Scalar(0, 255, 0));
 
-        this.saveImage(this.save_dir + "/ROI_draw_area.png",sourceImage);
+        this.saveImage(this.save_dir + "/ROI_draw_area.png", sourceImage);
     }
 
     /**
      * 把感兴趣的区域截取出来
      */
     @Test
-    public void testROI_2(){
+    public void testROI_2() {
         // 读取彩色图
-        Mat sourceImage = Imgcodecs.imread(this.p_test_file_path + "/5cent.jpg",Imgcodecs.CV_LOAD_IMAGE_COLOR);
+        Mat sourceImage = Imgcodecs.imread(this.p_test_file_path + "/5cent.jpg", Imgcodecs.CV_LOAD_IMAGE_COLOR);
 
         /*
          * Rect 矩形  4个参数 ，开始点的 x,y 坐标， width,height 截取的宽高
          */
-        Mat mat_roi = sourceImage.submat(new Rect(30,30,500,500));
+        Mat mat_roi = sourceImage.submat(new Rect(30, 30, 500, 500));
 
-        this.saveImage(this.save_dir + "/ROI_cut_area.png",mat_roi);
+        this.saveImage(this.save_dir + "/ROI_cut_area.png", mat_roi);
 
     }
 
     /**
      * 用图片在原始图片上划定 ROI 区域，并替换(如添加 logo)
-     *
+     * <p>
      * 方法-1
      */
     @Test
-    public void testROI_3(){
+    public void testROI_3() {
         // 读取彩色图
-        Mat sourceImage = Imgcodecs.imread(this.p_test_file_path + "/5cent.jpg",Imgcodecs.CV_LOAD_IMAGE_COLOR);
+        Mat sourceImage = Imgcodecs.imread(this.p_test_file_path + "/5cent.jpg", Imgcodecs.CV_LOAD_IMAGE_COLOR);
 
-        // 读取logo 尽量用读取原图
-        Mat logoImage = Imgcodecs.imread(this.p_test_file_path + "/logo-88-88.png",Imgcodecs.CV_LOAD_IMAGE_ANYCOLOR);
+        // 读取logo 尽量用读取原图,CV_LOAD_IMAGE_ANYCOLOR: 无损的源图像。
+        Mat logoImage = Imgcodecs.imread(this.p_test_file_path + "/logo-88-88.png", Imgcodecs.CV_LOAD_IMAGE_ANYCOLOR);
 
         //根据 logo 的宽高，在原图上划定感兴趣区域
-        Mat mat_roi = sourceImage.submat(new Rect(30,30,logoImage.cols(),logoImage.rows()));
+        Mat mat_roi = sourceImage.submat(new Rect(30, 30, logoImage.cols(), logoImage.rows()));
 
         System.out.println(logoImage.channels());
         System.out.println(mat_roi.channels());
@@ -114,38 +119,45 @@ public class StudySection_2 extends OpenCVProcessBase {
         // 在合并图像前注意，保证2个图像的通道是一致的，如果不一致需要转化
         //Imgproc.cvtColor(logoImage,newLogoImage,Imgproc.COLOR_GRAY2BGR);
 
-        //第一第四个参数就是各自权重
-        Core.addWeighted(mat_roi,0.1, logoImage, 0.9, 0., mat_roi);
+        /*
+        参数说明：addWeighted(src1, alpha, src2, beta, gamma, dst, dtype)
+        第一个参数：src1，表示进行加权操作的第一个图像对象，即输入图片1；
+        第二个参数：double型的alpha，表示第一个图像的加权系数，即图片1的融合比例；
+        第三个参数：src2，表示进行加权操作的第二个图像对象，即输入图片2；
+        第四个参数：double型的beta，表示第二个图像的加权系数，即图片2的融合比例。很多情况下，有关系 alpha+beta=1.0；
+        第五个参数：double型的gamma，表示一个作用到加权和后的图像上的标量，可以理解为加权和后的图像的偏移量；
+        第六个参数：dst，表示两个图像加权和后的图像，尺寸和图像类型与src1和src2相同，即输出图像；
+        第七个参数：输出阵列的可选深度，有默认值-1。当两个输入数组具有相同的深度时，这个参数设置为-1（默认值），即等同于src1.depth（）。
+        */
+        Core.addWeighted(mat_roi, 0.1, logoImage, 0.9, 0., mat_roi, -1);
 
-        this.saveImage(this.save_dir + "/ROI_add_area_image_1.png",sourceImage);
-
+        this.saveImage(this.save_dir + "/ROI_add_area_image_1.png", sourceImage);
 
     }
 
-
     /**
      * 用图片在原始图片上划定 ROI 区域，并替换(如添加 logo)
-     *
+     * <p>
      * 方法-2
      */
     @Test
-    public void testROI_4(){
+    public void testROI_4() {
         // 读取彩色图
-        Mat sourceImage = Imgcodecs.imread(this.p_test_file_path + "/5cent.jpg",Imgcodecs.CV_LOAD_IMAGE_COLOR);
+        Mat sourceImage = Imgcodecs.imread(this.p_test_file_path + "/5cent.jpg", Imgcodecs.CV_LOAD_IMAGE_COLOR);
 
         // 读取logo 尽量用读取原图
-        Mat logoImage = Imgcodecs.imread(this.p_test_file_path + "/logo-468-230.jpeg",Imgcodecs.CV_LOAD_IMAGE_ANYCOLOR);
+        Mat logoImage =
+                Imgcodecs.imread(this.p_test_file_path + "/logo-468-230.jpeg", Imgcodecs.CV_LOAD_IMAGE_ANYCOLOR);
 
         //原始图片转 BGRA 4通道图像（带透明层），作为 mask（遮罩）
-        Mat mask = Imgcodecs.imread(this.p_test_file_path + "/logo-468-230.jpeg",Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+        Mat mask = Imgcodecs.imread(this.p_test_file_path + "/logo-468-230.jpeg", Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
 
         //根据 logo 的宽高，在原图上划定感兴趣区域
-        Mat mat_roi = sourceImage.submat(new Rect(30,30,logoImage.cols(),logoImage.rows()));
+        Mat mat_roi = sourceImage.submat(new Rect(30, 30, logoImage.cols(), logoImage.rows()));
 
-        logoImage.copyTo(mat_roi,mask);
+        logoImage.copyTo(mat_roi, mask);
 
-        this.saveImage(this.save_dir + "/ROI_add_area_image_2.png",sourceImage);
-
+        this.saveImage(this.save_dir + "/ROI_add_area_image_2.png", sourceImage);
 
     }
 
