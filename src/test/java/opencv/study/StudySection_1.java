@@ -31,7 +31,7 @@ public class StudySection_1 extends OpenCVProcessBase {
      *
      * OpenCV CvType 说明：
      *
-     * opencv 中表示图像的类型的常量，通过 CvType.[name] 调用。
+     * OpenCV 中表示图像的类型的常量，通过 CvType.[name] 调用。
      *
      * 1. CvType 格式
      *      -- CV_<bit_depth>(S|U|F)C<number_of_channels>
@@ -59,7 +59,7 @@ public class StudySection_1 extends OpenCVProcessBase {
      *
      * OpenCV Scalar 说明：
      *
-     * opencv 中用以表示通道值对象，其构造值根据 CvType 通道 S|U|F 来决定取值范围。
+     * OpenCV 中用以表示通道值对象，其构造值根据 CvType 通道 S|U|F 来决定取值范围。
      *
      * 构造函数：
      *      new Scalar(param)
@@ -71,10 +71,10 @@ public class StudySection_1 extends OpenCVProcessBase {
      *      2. 构造函数的入参（值）的数量 < 通道数量 时，未传入值的通道值为0
      *      3. 多通道图像时，入参顺序 new Scalar(B,G,R,alpha)
      *          举例：
-     *          构造蓝色的图，CvType.8UC3 [3通道,RGB 彩色] , new Salar(255), 后面2个参数默认为0
-     *          构造绿色的图，CvType.8UC3 [3通道,RGB 彩色] , new Salar(0,255), 后面1个参数默认为0
-     *          构造红色的图，CvType.8UC3 [3通道,RGB 彩色] , new Salar(0,0,255)
-     *          构造蓝色的半透明图，CvType.8UC3 [4通道,RGBA 彩色+alpha 图像] , new Salar(255,0,0,125) 即可
+     *          构造蓝色的图，CvType.8UC3 [3通道,RGB 彩色] , new Scalar(255), 后面2个参数默认为0
+     *          构造绿色的图，CvType.8UC3 [3通道,RGB 彩色] , new Scalar(0,255), 后面1个参数默认为0
+     *          构造红色的图，CvType.8UC3 [3通道,RGB 彩色] , new Scalar(0,0,255)
+     *          构造蓝色的半透明图，CvType.8UC3 [4通道,RGBA 彩色+alpha 图像] , new Scalar(255,0,0,125) 即可
      */
 
 
