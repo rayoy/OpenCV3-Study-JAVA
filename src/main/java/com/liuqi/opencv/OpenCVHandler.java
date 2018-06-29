@@ -44,7 +44,7 @@ public class OpenCVHandler {
 
             // mac os
             else if(osName.equals("Mac OS X")){
-                opencvpath = "/usr/local/Cellar/opencv/3.4.0_1/share/OpenCV/java/libopencv_java340.dylib";
+                opencvpath = "/opt/local/share/OpenCV/java/libopencv_java341.dylib";
             }
             //System.out.println(opencvpath);
 
